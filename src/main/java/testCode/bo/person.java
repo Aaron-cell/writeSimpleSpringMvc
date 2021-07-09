@@ -28,4 +28,5 @@ public class person {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
 }
