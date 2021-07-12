@@ -3,7 +3,10 @@ package springMvc.org.springframework.web.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springMvc.org.springframework.context.support.ClassPathXmlApplicationContext;
+import springMvc.org.springframework.web.WebApplicationContext;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +17,25 @@ public class DispatcherServlet extends HttpServlet {
     public static Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     public DispatcherServlet() {
-        logger.info("springMvc.org.springframework.web.servlet.DispatcherServlet is created");
+
+    }
+
+    /**
+     * 重写Servlet初始化方法
+     * @throws ServletException
+     */
+    @Override
+    public void init() throws ServletException {
+        logger.info("start initialztion");
+        super.init();
+        try{
+            //获取SpringMvc配置文件位置
+            String contextConfigLocation = this.getServletConfig().getInitParameter("contextConfigLocation");
+            WebApplicationContext applicationContext = new ClassPathXmlApplicationContext(contextConfigLocation);
+            applicationContext.onRefresh();
+        }catch (Exception e){
+            throw new ServletException(e.getMessage());
+        }
     }
 
     /**
