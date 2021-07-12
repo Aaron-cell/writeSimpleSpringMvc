@@ -3,9 +3,9 @@ package springMvc.org.springframework.context.support;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springMvc.org.springframework.config.Configuration;
+import springMvc.org.springframework.utils.XmlParseUtils;
 import springMvc.org.springframework.web.WebApplicationContext;
-
-import java.util.Collections;
 
 /**
  * 自定义一个容器 用于存放保存bean信息
@@ -13,6 +13,7 @@ import java.util.Collections;
 public class ClassPathXmlApplicationContext implements WebApplicationContext {
     public static Logger logger = LoggerFactory.getLogger(ClassPathXmlApplicationContext.class);
     String contextConfigLocation=null;
+    Configuration configuration = null;
     public ClassPathXmlApplicationContext(String contextConfigLocation) {
         this.contextConfigLocation = contextConfigLocation;
     }
@@ -20,11 +21,13 @@ public class ClassPathXmlApplicationContext implements WebApplicationContext {
     public void onRefresh() throws Exception {
         //解析配置文件
         analyzeConfig();
+
+        //加载
     }
 
     /**
      * 解析配置文件
-     * 暂时只支持下面方式
+     * 暂时只支持部分功能
      * example:classpath:springmvc.xml
      */
     public void analyzeConfig() throws Exception{
@@ -32,7 +35,16 @@ public class ClassPathXmlApplicationContext implements WebApplicationContext {
             logger.error("contextConfigLocation must not null");
             throw new Exception("contextConfigLocation must not null");
         }
+        String xmlName = contextConfigLocation.substring(contextConfigLocation.indexOf(":") + 1);
+        Configuration config= new XmlParseUtils().build(xmlName);
+        setConfiguration(config);
+    }
 
-        String configFileName = contextConfigLocation.substring(contextConfigLocation.indexOf(":") + 1);
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }
