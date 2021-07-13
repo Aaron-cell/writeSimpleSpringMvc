@@ -1,10 +1,7 @@
 package springMvc.org.springframework.utils;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
@@ -15,21 +12,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Xml解析工具类
  */
-public class XmlParseUtils {
-    public static Logger logger = LoggerFactory.getLogger(XmlParseUtils.class);
+public class XmlParseUtil {
+    public static Logger logger = LoggerFactory.getLogger(XmlParseUtil.class);
 
     public Configuration build(String xmlName) throws Exception {
         InputStream resourceAsStream = null;
         try{
-            resourceAsStream = XmlParseUtils.class.getClassLoader().getResourceAsStream(xmlName);
+            resourceAsStream = XmlParseUtil.class.getClassLoader().getResourceAsStream(xmlName);
             if(resourceAsStream == null){
                 logger.error("not found springMvc configFile,initialztion failed");
                 throw new IOException("not found springMvc configFile,initialztion failed");
