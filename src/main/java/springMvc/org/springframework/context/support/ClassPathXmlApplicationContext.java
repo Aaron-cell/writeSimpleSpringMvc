@@ -8,6 +8,7 @@ import springMvc.org.springframework.beans.RootBeanDefinition;
 import springMvc.org.springframework.beans.factory.annotation.Autowired;
 import springMvc.org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import springMvc.org.springframework.config.Configuration;
+import springMvc.org.springframework.utils.Assert;
 import springMvc.org.springframework.utils.BeanDefinitionUtil;
 import springMvc.org.springframework.utils.XmlParseUtil;
 import springMvc.org.springframework.web.WebApplicationContext;
@@ -60,7 +61,7 @@ public class ClassPathXmlApplicationContext extends DefaultSingletonBeanRegistry
     private Object createBean(Class clazz) throws InstantiationException, IllegalAccessException {
         Object bean = null;
         for(BeanDefinition beanDefinition : this.beanDefinitionList){
-            Class<?> beanClass = beanDefinition.getBeanClass().getClass();
+            Class<?> beanClass = beanDefinition.getBeanClass();
 
             if(!clazz.isInterface()){
                 if(beanClass.equals(clazz)){
@@ -127,7 +128,7 @@ public class ClassPathXmlApplicationContext extends DefaultSingletonBeanRegistry
      */
     private Object instanceBeanDefinition(BeanDefinition beanDefinition) throws IllegalAccessException, InstantiationException {
         Object object = null;
-        Class beanClass = (Class) beanDefinition.getBeanClass();
+        Class beanClass = beanDefinition.getBeanClass();
         object = beanClass.newInstance();
         return object;
     }
@@ -151,10 +152,7 @@ public class ClassPathXmlApplicationContext extends DefaultSingletonBeanRegistry
      * example:classpath:springmvc.xml
      */
     public void analyzeConfig() throws Exception{
-        if(StringUtils.isEmpty(contextConfigLocation)){
-            logger.error("contextConfigLocation must not null");
-            throw new Exception("contextConfigLocation must not null");
-        }
+        Assert.notNull(contextConfigLocation,"contextConfigLocation must not null");
         String xmlName = contextConfigLocation.substring(contextConfigLocation.indexOf(":") + 1);
         Configuration config= new XmlParseUtil().build(xmlName);
         this.configuration = config;
@@ -162,9 +160,7 @@ public class ClassPathXmlApplicationContext extends DefaultSingletonBeanRegistry
 
 
     public BeanDefinition getBeanDefinition(String beanName) {
-        if(StringUtils.isEmpty(beanName)){
-            throw new IllegalArgumentException("beanName this field must not be empty");
-        }
+        Assert.notNull(beanName,"beanName this field must not be empty");
         for(BeanDefinition beanDefinition : this.beanDefinitionList){
             if(beanName.equals(beanDefinition.getBeanName())){
                 return beanDefinition;

@@ -3,17 +3,17 @@ package springMvc.org.springframework.beans;
 import java.lang.annotation.Annotation;
 
 public abstract class AbstractBeanDefinition implements BeanDefinition{
-    volatile Object beanClass;
+    volatile Class beanClass;
 
     String beanName;
 
     volatile Annotation[] annotations;
 
-    public Object getBeanClass() {
+    public Class getBeanClass() {
         return beanClass;
     }
 
-    public void setBeanClass(Object beanClass) {
+    public void setBeanClass(Class beanClass) {
         this.beanClass = beanClass;
     }
 

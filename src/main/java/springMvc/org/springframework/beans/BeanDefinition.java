@@ -4,9 +4,9 @@ import java.lang.annotation.Annotation;
 
 public interface BeanDefinition {
 
-    Object getBeanClass();
+    Class getBeanClass();
 
-    void setBeanClass(Object beanClass);
+    void setBeanClass(Class beanClass);
 
     String getBeanName();
 
