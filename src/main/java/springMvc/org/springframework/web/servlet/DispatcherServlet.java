@@ -27,7 +27,6 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         logger.info("start initialztion");
-        super.init();
         try{
             //获取SpringMvc配置文件位置
             String contextConfigLocation = this.getServletConfig().getInitParameter("contextConfigLocation");

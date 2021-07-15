@@ -3,9 +3,9 @@ package springMvc.org.springframework.beans;
 import java.lang.annotation.Annotation;
 
 public class RootBeanDefinition extends AbstractBeanDefinition{
-    public RootBeanDefinition build(Class beanClass){
+    public RootBeanDefinition build(Class beanClass,String beanName){
         Annotation[] annotations = beanClass.getAnnotations();
-        return build(beanClass,beanClass.getName(),annotations);
+        return build(beanClass,beanName,annotations);
     }
 
     public RootBeanDefinition build(Class beanClass,String beanName,Annotation[] annotations){

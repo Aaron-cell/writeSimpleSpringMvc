@@ -2,6 +2,7 @@ package springMvc.org.springframework.beans.factory.support;
 
 import springMvc.org.springframework.utils.Assert;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +30,12 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
     }
 
     public Object getSingleton(String beanName) {
-        return null;
+        Assert.notNull(beanName,"Bean name must not be null");
+        Object bean = null;
+        synchronized (this.singletonObjects) {
+            bean = this.singletonObjects.get(beanName);
+        }
+        return bean;
     }
 
     public String[] getSingletonNames() {
