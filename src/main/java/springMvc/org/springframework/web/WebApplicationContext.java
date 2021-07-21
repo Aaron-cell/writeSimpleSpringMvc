@@ -9,4 +9,7 @@ public interface WebApplicationContext {
 
     Object createBean(BeanDefinition beanDefinition) throws IllegalAccessException, InstantiationException;
 
+    void setParentContext(Object object);
+
+    Object getParentContext();
 }

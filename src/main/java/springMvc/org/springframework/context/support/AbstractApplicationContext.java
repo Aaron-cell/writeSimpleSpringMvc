@@ -14,6 +14,8 @@ public abstract class AbstractApplicationContext extends DefaultSingletonBeanReg
 
     public volatile List<BeanDefinition> beanDefinitionList = new ArrayList<BeanDefinition>();
 
+    private Object context;
+
     /**
      * 根据Class类型 获取对应的beanDefinition
      */
@@ -100,5 +102,11 @@ public abstract class AbstractApplicationContext extends DefaultSingletonBeanReg
         }
     }
 
+    public void setParentContext(Object context){
+        this.context=context;
+    }
 
+    public Object getParentContext(){
+        return this.context;
+    }
 }
