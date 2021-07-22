@@ -2,7 +2,6 @@ package springMvc.org.springframework.beans.factory.support;
 
 import springMvc.org.springframework.utils.Assert;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,5 +43,9 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
 
     public boolean containsSingleton(String beanName) {
         return false;
+    }
+
+    public Map<String, Object> getSingletonObjects(){
+        return this.singletonObjects;
     }
 }
