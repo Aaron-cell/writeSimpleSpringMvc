@@ -33,4 +33,10 @@ public class PersonController {
         return "success.jsp";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/hello3",method = {RequestMethod.GET})
+    public String hello3(String name,Integer age,int height){
+        return "success.jsp";
+    }
+
 }

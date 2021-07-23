@@ -76,5 +76,12 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
+
+        <!--引入asm 用于解决无法获取参数名称的问题-->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-all</artifactId>
+            <version>6.0_BETA</version>
+        </dependency>
     </dependencies>
 </project>

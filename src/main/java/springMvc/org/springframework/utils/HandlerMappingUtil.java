@@ -3,6 +3,7 @@ package springMvc.org.springframework.utils;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springMvc.org.springframework.core.MethodParameter;
 import springMvc.org.springframework.stereotype.Controller;
 import springMvc.org.springframework.web.bind.annotation.RequestMapping;
 import springMvc.org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,9 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class HandlerMappingUtil {
@@ -52,8 +56,12 @@ public class HandlerMappingUtil {
      * @param chain
      */
     public static void handleRequest(HttpServletRequest req, HttpServletResponse resp, HandlerExecutionChain chain) throws InvocationTargetException, IllegalAccessException, IOException, ServletException {
+        //参数封装
+        List<MethodParameter> methodParameterList = wrapParameter(chain);
+        //参数注入
+        Object[] args = paramInject(chain,methodParameterList,req);
         //获取执行的返回结果
-        Object result = chain.getMethod().invoke(chain.getController());
+        Object result = chain.getMethod().invoke(chain.getController(),args);
 
         //判断是否适用@ResponseBody注解
         if(!isResponseBodyAnnotation(chain.getController().getClass(),chain.getMethod())){
@@ -61,6 +69,40 @@ public class HandlerMappingUtil {
         }else{
             invokeResponseBodyHandler(req,resp,result);
         }
+    }
+
+    /**
+     * 封装参数
+     * @param chain
+     * @return
+     */
+    private static List<MethodParameter> wrapParameter(HandlerExecutionChain chain) throws IOException {
+        Method method = chain.getMethod();
+        /**
+         * jdk1.8 提供了获取参数名的方法 但需要 编译时候必须有编译选项：javac -parameters打开，默认是关闭的
+         * jdk1.7及以下 未提供获取参数名的方法
+         * 故这里采用asm框架 实现该功能
+         */
+        List<String> methodParamNames = AsmUtil.getMethodParamNames(chain.getController().getClass(), chain.getMethod());
+        List<MethodParameter> methodParameters = new ArrayList<>();
+        Parameter[] parameters = method.getParameters();
+        for(int i=0;i<parameters.length;i++){
+            Parameter parameter = parameters[i];
+            methodParameters.add(new MethodParameter(parameter, parameter.getType(), null, methodParamNames.get(i)));
+        }
+        return methodParameters;
+    }
+
+    /**
+     * 参数注入
+     * @param chain
+     * @param methodParameters
+     * @param req
+     * @return
+     */
+    private static Object[] paramInject(HandlerExecutionChain chain,List<MethodParameter> methodParameters, HttpServletRequest req) {
+
+        return null;
     }
 
     /**
