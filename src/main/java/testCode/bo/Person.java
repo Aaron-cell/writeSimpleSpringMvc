@@ -1,6 +1,6 @@
 package testCode.bo;
 
-public class person {
+public class Person {
     private String name;
     private Integer age;
     private String sex;
@@ -29,4 +29,12 @@ public class person {
         this.sex = sex;
     }
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                '}';
+    }
 }

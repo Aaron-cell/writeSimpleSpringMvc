@@ -1,6 +1,7 @@
 package springMvc.org.springframework.utils;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springMvc.org.springframework.core.MethodParameter;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -55,11 +57,11 @@ public class HandlerMappingUtil {
      * @param resp
      * @param chain
      */
-    public static void handleRequest(HttpServletRequest req, HttpServletResponse resp, HandlerExecutionChain chain) throws InvocationTargetException, IllegalAccessException, IOException, ServletException {
+    public static void handleRequest(HttpServletRequest req, HttpServletResponse resp, HandlerExecutionChain chain) throws Exception {
         //参数封装
         List<MethodParameter> methodParameterList = wrapParameter(chain);
         //参数注入
-        Object[] args = paramInject(chain,methodParameterList,req);
+        Object[] args = paramInject(methodParameterList,req);
         //获取执行的返回结果
         Object result = chain.getMethod().invoke(chain.getController(),args);
 
@@ -95,14 +97,29 @@ public class HandlerMappingUtil {
 
     /**
      * 参数注入
-     * @param chain
      * @param methodParameters
      * @param req
      * @return
      */
-    private static Object[] paramInject(HandlerExecutionChain chain,List<MethodParameter> methodParameters, HttpServletRequest req) {
-
-        return null;
+    private static Object[] paramInject(List<MethodParameter> methodParameters, HttpServletRequest req) throws Exception {
+        ArrayList<Object> paramArray = new ArrayList<>();
+        for(MethodParameter methodParameter : methodParameters){
+            Object o = null;
+            //基本数据类型
+            if(CommonUtil.isBaseType(methodParameter.getParameterType())){
+                String parameterValue = req.getParameter(methodParameter.getParameterName());
+                if(StringUtils.isNotEmpty(parameterValue)){
+                    //类型转换
+                    o = CommonUtil.typeConversion(methodParameter.getParameterType(), parameterValue);
+                }
+                paramArray.add(o);
+            }else{
+                //引用类型
+                o = CommonUtil.setReferenceTypeAttr(methodParameter.getParameterType(),req);
+                paramArray.add(o);
+            }
+        }
+        return paramArray.toArray();
     }
 
     /**

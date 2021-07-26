@@ -5,6 +5,7 @@ import springMvc.org.springframework.stereotype.Controller;
 import springMvc.org.springframework.web.bind.annotation.RequestMapping;
 import springMvc.org.springframework.web.bind.annotation.RequestMethod;
 import springMvc.org.springframework.web.bind.annotation.ResponseBody;
+import testCode.bo.Person;
 import testCode.service.PersonService;
 
 @Controller
@@ -29,7 +30,8 @@ public class PersonController {
 
     @ResponseBody
     @RequestMapping(value = "/hello2",method = {RequestMethod.GET})
-    public String hello2(){
+    public String hello2(Person person){
+        System.out.println(person.toString());
         return "success.jsp";
     }
 

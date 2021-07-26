@@ -91,6 +91,8 @@ public class DispatcherServlet extends HttpServlet {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -109,6 +111,8 @@ public class DispatcherServlet extends HttpServlet {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -117,7 +121,7 @@ public class DispatcherServlet extends HttpServlet {
      * @param req
      * @param resp
      */
-    public void doDispatcher(HttpServletRequest req, HttpServletResponse resp) throws IOException, IllegalAccessException, ServletException, InvocationTargetException {
+    public void doDispatcher(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         //获取Handler
         HandlerExecutionChain chain = handlerMapping.getHandler(req);
         if(chain==null){
